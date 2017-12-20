@@ -13,7 +13,12 @@ namespace RandomFileCreator
             var configLineQuan = ConfigurationManager.AppSettings["linesQuantity"];
             if (configLineQuan == null) throw new ArgumentNullException(nameof(configLineQuan));
 
-            var lineQuan = int.Parse(configLineQuan);
+            int lineQuan;
+            int.TryParse(configLineQuan, out lineQuan);
+            if (lineQuan == 0)
+            {
+                lineQuan = 512000;
+            }
 
             var randomTextContent = new RandomTextContent(lineQuan, outputFilePath);
 

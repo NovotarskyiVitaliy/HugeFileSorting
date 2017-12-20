@@ -14,11 +14,18 @@ namespace OrderFile
         {
             var configPieceSize = ConfigurationManager.AppSettings["pieceSize"];
             if (configPieceSize == null) throw new ArgumentNullException(nameof(configPieceSize));
-            var pieceSize = int.Parse(configPieceSize);
+
+            int pieceSize;
+            int.TryParse(configPieceSize, out pieceSize);
+            if (pieceSize == 0)
+            {
+                pieceSize = 100;
+            }
             var inputFilePath = ConfigurationManager.AppSettings["inputFilePath"];
             if (inputFilePath == null) throw new ArgumentNullException(nameof(inputFilePath));
             var outputFilePath = ConfigurationManager.AppSettings["outputFilePath"];
             if (outputFilePath == null) throw new ArgumentNullException(nameof(outputFilePath));
+
             Console.WriteLine("It has being processing...");
 
             var sw = Stopwatch.StartNew();
@@ -47,6 +54,9 @@ namespace OrderFile
             OutputFilePath = outputFilePath;
         }
 
+        /// <summary>
+        /// Split input huge file into Pieces
+        /// </summary>
         public IEnumerable<string> SplitIntoOrderedPiece()
         {
             var pieceConteiner = new List<string>();
@@ -83,7 +93,10 @@ namespace OrderFile
             Console.WriteLine($"{Path.GetTempFileName()} is splited");
             return pieceFilePath;
         }
-
+        /// <summary>
+        /// Merge Pieces into result file
+        /// </summary>
+        /// <param name="listFilePathesPiece"> List of pathes of Pieces </param>
         public void MergePieces(IEnumerable<string> listFilePathesPiece)
         {
             var pieceStreamReader = listFilePathesPiece
