@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 
 namespace RandomFileCreator
@@ -24,7 +25,9 @@ namespace RandomFileCreator
 
             Console.WriteLine("It has been processing...");
             randomTextContent.GenerateFile();
-            Console.WriteLine($"{lineQuan} lines has been genereted into file {outputFilePath} ...");
+            FileInfo fi = new FileInfo(outputFilePath);
+            Console.WriteLine(
+                $"{lineQuan} lines has been genereted into file {outputFilePath} with size {fi.Length.ToString("N1", CultureInfo.InvariantCulture)} byte...");
             Console.Read();
         }
 
